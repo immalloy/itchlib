@@ -1,0 +1,61 @@
+{
+  "name": "itchlib",
+  "version": "0.1.0",
+  "description": "A Node.js client for reading itch.io games, creators, search, community, and downloads.",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "check": "node --check src/index.js && npm run format:check && npm run lint",
+    "typecheck": "tsc --project tsconfig.json",
+    "pack:check": "npm pack --dry-run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "files": [
+    "src/",
+    "types/",
+    "README.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "keywords": [
+    "itch.io",
+    "itchio",
+    "games",
+    "game-discovery",
+    "metadata",
+    "downloads",
+    "scraper"
+  ],
+  "dependencies": {
+    "cheerio": "^1.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.0",
+    "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "minimatch": "^11.0.8"
+  }
+}
