@@ -1,7 +1,15 @@
 {
   "name": "itchlib",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A Node.js client for reading itch.io games, creators, search, community, and downloads.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/immalloy/itchlib.git"
+  },
+  "homepage": "https://github.com/immalloy/itchlib#readme",
+  "bugs": {
+    "url": "https://github.com/immalloy/itchlib/issues"
+  },
   "type": "module",
   "main": "./src/index.js",
   "module": "./src/index.js",
