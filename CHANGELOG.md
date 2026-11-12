@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Stopped retrying POST and other write requests.
+
 ## 1.0.0
 
 - Game info: `getGame`, `getUploads`, `getComments`, `getProfile`.

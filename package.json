@@ -1,6 +1,6 @@
 {
   "name": "itchlib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Node.js client for reading itch.io games, creators, search, community, and downloads.",
   "repository": {
     "type": "git",

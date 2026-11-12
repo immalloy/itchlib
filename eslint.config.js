@@ -7,7 +7,7 @@ export default [
   },
   js.configs.recommended,
   {
-    files: ["src/**/*.js", "tests/**/*.js", "eslint.config.js"],
+    files: ["src/**/*.js", "eslint.config.js"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",

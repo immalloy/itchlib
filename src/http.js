@@ -4,6 +4,7 @@ const DEFAULT_TIMEOUT_MS = 15_000;
 const DEFAULT_ATTEMPTS = 3;
 const DEFAULT_MAX_RETRY_DELAY_MS = 30_000;
 const RETRYABLE_STATUS = new Set([408, 429]);
+const RETRYABLE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
 
 function retryDelay(response, attempt) {
   const retryAfter = response.headers?.get?.("retry-after");
@@ -26,7 +27,7 @@ export class ItchTransport {
     fetch: fetchImpl = globalThis.fetch,
     timeout = DEFAULT_TIMEOUT_MS,
     headers = {},
-    userAgent = "itchlib/0.1.0",
+    userAgent = "itchlib/1.0.1",
     maxRetryDelay = DEFAULT_MAX_RETRY_DELAY_MS,
   } = {}) {
     if (typeof fetchImpl !== "function") throw new TypeError("A Fetch API implementation is required");
@@ -43,6 +44,8 @@ export class ItchTransport {
   async request(url, options = {}) {
     const timeout = options.timeout ?? this.timeout;
     const { timeout: _timeout, maxRetryDelay: _maxRetryDelay, ...fetchOptions } = options;
+    const method = String(fetchOptions.method || "GET").toUpperCase();
+    const canRetry = RETRYABLE_METHODS.has(method);
     let lastError;
 
     for (let attempt = 1; attempt <= DEFAULT_ATTEMPTS; attempt += 1) {
@@ -63,7 +66,7 @@ export class ItchTransport {
           headers: { ...this.headers, ...fetchOptions.headers },
           signal: controller.signal,
         });
-        if (!isRetryableStatus(response.status) || attempt === DEFAULT_ATTEMPTS) return response;
+        if (!canRetry || !isRetryableStatus(response.status) || attempt === DEFAULT_ATTEMPTS) return response;
         const delay = retryDelay(response, attempt);
         if (delay > this.maxRetryDelay) return response;
         try {
@@ -89,7 +92,7 @@ export class ItchTransport {
           code: "ITCH_NETWORK_ERROR",
           cause,
         });
-        if (attempt === DEFAULT_ATTEMPTS) throw lastError;
+        if (!canRetry || attempt === DEFAULT_ATTEMPTS) throw lastError;
         await new Promise((resolve) =>
           setTimeout(resolve, Math.round(500 * 2 ** (attempt - 1) * (0.8 + Math.random() * 0.4))),
         );
